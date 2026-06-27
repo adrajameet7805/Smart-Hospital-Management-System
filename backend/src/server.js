@@ -1,11 +1,20 @@
 require('dotenv').config();
 
-// .env validation — fail fast before any service starts
-const REQUIRED_ENV = ['JWT_SECRET', 'DB_HOST', 'DB_PASSWORD'];
+// Fail fast — validate required environment variables on startup
+const REQUIRED_ENV = [
+  'JWT_SECRET',
+  'DB_HOST',
+  'DB_PASSWORD',
+  'REDIS_URL',
+];
+
 const missing = REQUIRED_ENV.filter(k => !process.env[k]);
 if (missing.length > 0) {
-  console.error(`FATAL: Missing required env variables: ${missing.join(', ')}`);
-  console.error('Copy .env.example to .env and fill all values before starting.');
+  console.error('╔══════════════════════════════════════════════╗');
+  console.error('║  FATAL: Missing required environment vars    ║');
+  console.error('╚══════════════════════════════════════════════╝');
+  console.error('Missing:', missing.join(', '));
+  console.error('Copy .env.example → .env and fill all values.');
   process.exit(1);
 }
 
@@ -44,19 +53,23 @@ const io = new Server(server, {
     methods: ['GET', 'POST'],
     credentials: true,
   },
+  transports: ['websocket', 'polling'],
 });
 
 // Middleware
 app.use(helmet({ crossOriginResourcePolicy: false }));
 app.use(cors({
   origin: (origin, callback) => {
-    if (!origin || ALLOWED_ORIGINS.includes(origin)) {
-      callback(null, true);
-    } else {
-      callback(new Error(`CORS blocked: ${origin}`));
+    // Allow requests with no origin (mobile apps, curl, Postman)
+    if (!origin) return callback(null, true);
+    if (ALLOWED_ORIGINS.includes(origin)) {
+      return callback(null, true);
     }
+    return callback(new Error(`CORS blocked for origin: ${origin}`));
   },
   credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
 }));
 app.use(cookieParser());
 app.use(express.json({ limit: '10mb' }));
@@ -79,9 +92,7 @@ async function startServer() {
   try {
     await initializeDatabase();
 
-    // Rate limiting
-    app.use('/api/v1/auth/login', authLimiter);
-    app.use('/api/v1/auth/register', authLimiter);
+    // Rate limiting (authLimiter is now applied inside auth.js routes)
     app.use('/api/v1/', apiLimiter);
 
     // v1 API Routes

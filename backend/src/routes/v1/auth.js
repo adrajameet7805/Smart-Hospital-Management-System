@@ -3,6 +3,21 @@ const { body } = require('express-validator');
 const { authenticate } = require('../../middleware/auth');
 const asyncHandler = require('../../utils/asyncHandler');
 const AuthController = require('../../controllers/AuthController');
+const rateLimit = require('express-rate-limit');
+
+const authLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,  // 15 minutes
+  max: process.env.NODE_ENV === 'production' ? 10 : 1000,
+  message: {
+    error: 'Too many login attempts. Please try again in 15 minutes.',
+    code: 'RATE_LIMIT_EXCEEDED'
+  },
+  standardHeaders: true,
+  legacyHeaders: false,
+  // Skip rate limiting entirely in development
+  skip: (req) => process.env.NODE_ENV !== 'production',
+  keyGenerator: (req) => req.ip || req.headers['x-forwarded-for'],
+});
 
 const router = express.Router();
 
@@ -13,7 +28,8 @@ router.post('/register', [
   body('role').isIn(['patient', 'doctor', 'admin']).withMessage('Invalid role'),
 ], asyncHandler(AuthController.register));
 
-router.post('/login', [
+// Apply ONLY to login — not to register or other auth routes
+router.post('/login', authLimiter, [
   body('email').isEmail().withMessage('Valid email is required'),
   body('password').notEmpty().withMessage('Password is required'),
 ], asyncHandler(AuthController.login));
