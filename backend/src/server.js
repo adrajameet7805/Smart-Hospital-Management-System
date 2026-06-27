@@ -26,7 +26,8 @@ const app = express();
 app.set('trust proxy', 1);
 const server = http.createServer(app);
 
-const ALLOWED_ORIGINS = (process.env.ALLOWED_ORIGINS || 'http://localhost')
+const ALLOWED_ORIGINS = (process.env.ALLOWED_ORIGINS || 
+  'http://localhost,http://localhost:5173')
   .split(',')
   .map(o => o.trim());
 
@@ -47,7 +48,16 @@ const io = new Server(server, {
 
 // Middleware
 app.use(helmet({ crossOriginResourcePolicy: false }));
-app.use(cors({ origin: process.env.CORS_ORIGIN || 'http://localhost:5173', credentials: true }));
+app.use(cors({
+  origin: (origin, callback) => {
+    if (!origin || ALLOWED_ORIGINS.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error(`CORS blocked: ${origin}`));
+    }
+  },
+  credentials: true,
+}));
 app.use(cookieParser());
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true }));
