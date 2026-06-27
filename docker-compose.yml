@@ -64,7 +64,6 @@ services:
       - JWT_SECRET=${JWT_SECRET:-smart-hospital-jwt-secret-2026}
       - JWT_EXPIRES_IN=15m
       - ALLOWED_ORIGINS=${ALLOWED_ORIGINS:-http://localhost,http://localhost:5173}
-      # REMOVED: CORS_ORIGIN=http://localhost:5173 (was causing login CORS failure)
     depends_on:
       postgres:
         condition: service_healthy

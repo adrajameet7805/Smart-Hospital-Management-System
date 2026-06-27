@@ -1,20 +1,10 @@
 require('dotenv').config();
 
-// Fail fast — validate required environment variables on startup
-const REQUIRED_ENV = [
-  'JWT_SECRET',
-  'DB_HOST',
-  'DB_PASSWORD',
-  'REDIS_URL',
-];
-
+const REQUIRED_ENV = ['JWT_SECRET', 'DB_HOST', 'DB_PASSWORD', 'REDIS_URL'];
 const missing = REQUIRED_ENV.filter(k => !process.env[k]);
 if (missing.length > 0) {
-  console.error('╔══════════════════════════════════════════════╗');
-  console.error('║  FATAL: Missing required environment vars    ║');
-  console.error('╚══════════════════════════════════════════════╝');
-  console.error('Missing:', missing.join(', '));
-  console.error('Copy .env.example → .env and fill all values.');
+  console.error('FATAL: Missing required env variables:', missing.join(', '));
+  console.error('Copy .env.example to .env and fill all values.');
   process.exit(1);
 }
 
@@ -35,7 +25,7 @@ const app = express();
 app.set('trust proxy', 1);
 const server = http.createServer(app);
 
-const ALLOWED_ORIGINS = (process.env.ALLOWED_ORIGINS || 
+const ALLOWED_ORIGINS = (process.env.ALLOWED_ORIGINS ||
   'http://localhost,http://localhost:5173')
   .split(',')
   .map(o => o.trim());
@@ -60,12 +50,10 @@ const io = new Server(server, {
 app.use(helmet({ crossOriginResourcePolicy: false }));
 app.use(cors({
   origin: (origin, callback) => {
-    // Allow requests with no origin (mobile apps, curl, Postman)
-    if (!origin) return callback(null, true);
-    if (ALLOWED_ORIGINS.includes(origin)) {
+    if (!origin || ALLOWED_ORIGINS.includes(origin)) {
       return callback(null, true);
     }
-    return callback(new Error(`CORS blocked for origin: ${origin}`));
+    return callback(new Error(`CORS blocked: ${origin}`));
   },
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
