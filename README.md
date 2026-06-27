@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <div align="center">
 
 ```text
@@ -335,3 +336,7 @@ See [LICENSE](./LICENSE) for full details.
 <p align="center">
 Built with ❤️ for healthcare innovation
 </p>
+=======
+# Smart-Hospital-Management-System
+Smart Hospital Management System is an AI-powered full-stack healthcare platform that streamlines patient care, appointments, billing, pharmacy, bed management, and ambulance tracking with secure, real-time hospital operations.
+>>>>>>> c793498920253fb4ef57627b0c3e4864ad63bb29
