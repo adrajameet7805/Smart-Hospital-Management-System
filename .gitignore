@@ -1,14 +1,23 @@
+# Environment secrets — NEVER commit
 .env
+.env.local
+.env.production
+
+# Node
 node_modules/
-.DS_Store
-__pycache__/
-*.pyc
-*.pyo
-*.pyd
-.Python
-env/
-venv/
-.venv/
 dist/
 build/
-*.log
+
+# Python
+__pycache__/
+*.pyc
+venv/
+.venv/
+
+# Docker volumes
+pgdata/
+redisdata/
+
+# OS
+.DS_Store
+Thumbs.db

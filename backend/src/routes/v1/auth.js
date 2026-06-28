@@ -14,8 +14,12 @@ const authLimiter = rateLimit({
   },
   standardHeaders: true,
   legacyHeaders: false,
-  // Completely skip rate limiting in development mode
-  skip: () => process.env.NODE_ENV !== 'production',
+  // Skip rate limiting completely in development
+  skip: (req) => process.env.NODE_ENV !== 'production',
+  keyGenerator: (req) =>
+    req.headers['x-forwarded-for']?.split(',')[0]?.trim() ||
+    req.ip ||
+    'unknown',
 });
 
 const router = express.Router();

@@ -6,6 +6,13 @@ const api = axios.create({
   withCredentials: true, // Send HTTP-Only cookies automatically
 });
 
+// Add JWT token to every request automatically
+api.interceptors.request.use((config) => {
+  const token = localStorage.getItem('token');
+  if (token) config.headers.Authorization = `Bearer ${token}`;
+  return config;
+});
+
 // Handle 401 responses — redirect to login
 api.interceptors.response.use(
   (response) => response,
@@ -98,8 +105,17 @@ export const qrApi = {
   getPatientQr: (patientId: number) => api.get(`/qr/patient/${patientId}`),
 };
 
-// Separate Axios instance for AI service — bypasses /api/v1 prefix
-const aiAxios = axios.create({ baseURL: '/api/ai' });
+// Separate AI instance — bypasses /api/v1 prefix entirely
+const aiAxios = axios.create({
+  baseURL: '/api/ai',
+  headers: { 'Content-Type': 'application/json' },
+});
+
+aiAxios.interceptors.request.use((config) => {
+  const token = localStorage.getItem('token');
+  if (token) config.headers.Authorization = `Bearer ${token}`;
+  return config;
+});
 
 export const aiApi = {
   triage: (data: { symptoms: string[]; age?: number; gender?: string }) =>
@@ -113,7 +129,7 @@ export const aiApi = {
     });
   },
 
-  voiceCommand: (command: string, role: string) =>
+  voiceCommand: (command: string, role: string = 'doctor') =>
     aiAxios.post('/command', { command, role }),
 
   predictive: () =>
