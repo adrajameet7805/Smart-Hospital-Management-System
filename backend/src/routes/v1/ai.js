@@ -1,28 +1,36 @@
 const express = require('express');
-const router = express.Router();
-const axios = require('axios');
 
+const router = express.Router();
 const AI_SERVICE_URL = process.env.AI_SERVICE_URL || 'http://ai-services:8000';
 
-// Proxy voice command to Python FastAPI
+async function proxyToAi(path, options = {}) {
+  const response = await fetch(`${AI_SERVICE_URL}${path}`, options);
+  const data = await response.json();
+
+  if (!response.ok) {
+    throw new Error(`AI service request failed with status ${response.status}`);
+  }
+
+  return data;
+}
+
 router.post('/command', async (req, res) => {
   try {
-    const response = await axios.post(
-      `${AI_SERVICE_URL}/command`, req.body
-    );
-    res.json(response.data);
+    const data = await proxyToAi('/command', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(req.body),
+    });
+    res.json(data);
   } catch (err) {
     res.status(502).json({ error: 'AI Voice Service unavailable.' });
   }
 });
 
-// Proxy predictive analytics to Python FastAPI
 router.get('/predictive', async (req, res) => {
   try {
-    const response = await axios.get(
-      `${AI_SERVICE_URL}/predictive`
-    );
-    res.json(response.data);
+    const data = await proxyToAi('/predictive');
+    res.json(data);
   } catch (err) {
     res.status(502).json({ error: 'AI Predictive Service unavailable.' });
   }

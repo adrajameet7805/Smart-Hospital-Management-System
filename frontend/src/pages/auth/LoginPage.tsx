@@ -32,9 +32,9 @@ export default function LoginPage() {
     }
   }, [user, navigate]);
 
-  const quickLogin = (email: string) => {
+  const quickLogin = (email: string, password: string) => {
     setEmail(email);
-    setPassword('admin123');
+    setPassword(password);
   };
 
   return (
@@ -147,21 +147,21 @@ export default function LoginPage() {
           <p className="text-center text-xs text-surface-200 mb-3 uppercase tracking-wider">Quick Demo Access</p>
           <div className="grid grid-cols-3 gap-3">
             <button
-              onClick={() => quickLogin('admin@smarthospital.com')}
+              onClick={() => quickLogin('admin@smarthospital.com', 'admin123')}
               className="glass-card p-3 text-center hover:border-violet-500/30 group cursor-pointer"
             >
               <Shield className="w-5 h-5 text-violet-400 mx-auto mb-1 group-hover:scale-110 transition-transform" />
               <span className="text-xs text-surface-100">Admin</span>
             </button>
             <button
-              onClick={() => quickLogin('aisha.patel@smarthospital.com')}
+              onClick={() => quickLogin('aisha.patel@smarthospital.com', 'doctor123')}
               className="glass-card p-3 text-center hover:border-primary-500/30 group cursor-pointer"
             >
               <Stethoscope className="w-5 h-5 text-primary-400 mx-auto mb-1 group-hover:scale-110 transition-transform" />
               <span className="text-xs text-surface-100">Doctor</span>
             </button>
             <button
-              onClick={() => quickLogin('arjun.mehta@email.com')}
+              onClick={() => quickLogin('arjun.mehta@email.com', 'patient123')}
               className="glass-card p-3 text-center hover:border-accent-500/30 group cursor-pointer"
             >
               <User className="w-5 h-5 text-accent-400 mx-auto mb-1 group-hover:scale-110 transition-transform" />

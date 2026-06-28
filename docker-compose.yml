@@ -35,7 +35,7 @@ services:
     restart: unless-stopped
 
   # Node.js Backend
-    backend:
+  backend:
     build:
       context: .                    # Changed to root
       dockerfile: ./backend/Dockerfile

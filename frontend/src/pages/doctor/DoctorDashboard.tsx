@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useAuth } from '../../context/AuthContext';
 import { doctorApi, appointmentApi } from '../../lib/api';
-import { Calendar, Users, Clock, CheckCircle, AlertCircle, Stethoscope, ArrowUpRight } from 'lucide-react';
+import { Calendar, Users, Clock, CheckCircle, Stethoscope } from 'lucide-react';
 
 export default function DoctorDashboard() {
   const { profile } = useAuth();

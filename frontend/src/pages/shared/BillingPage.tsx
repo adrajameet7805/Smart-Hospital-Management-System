@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import { billingApi } from '../../lib/api';
-import { CreditCard, Download, Eye } from 'lucide-react';
 
 export default function BillingPage() {
   const [bills, setBills] = useState<any[]>([]);

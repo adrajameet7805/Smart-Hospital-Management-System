@@ -3,8 +3,8 @@ import { NavLink, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import {
   LayoutDashboard, Users, UserCog, Calendar, FileText, CreditCard,
-  Pill, Truck, BarChart3, Settings, ChevronLeft, ChevronRight,
-  Stethoscope, BedDouble, ClipboardList, Activity, Heart
+  Pill, Truck, BarChart3, ChevronLeft, ChevronRight,
+  BedDouble, ClipboardList, Activity, Heart
 } from 'lucide-react';
 
 const navItems = {

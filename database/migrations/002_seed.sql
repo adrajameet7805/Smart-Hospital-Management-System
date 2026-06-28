@@ -7,18 +7,18 @@
 -- ADMIN USER (password: admin123)
 -- ============================================
 INSERT INTO users (name, email, password, role, phone) VALUES
-('Admin User', 'admin@smarthospital.com', '$2b$10$5Q8gJHv3q4x5PxK2e0q9duWJM5A2a3xGhFz5YJ3KJ7t1zF3YdEaHe', 'admin', '+91-9000000001')
+('Admin User', 'admin@smarthospital.com', '$2a$10$DKbhyFv/O1HI2SQBUbLYZeTFHCrs7jBiE.V4zgotLoAP5kzP/jiTm', 'admin', '+91-9000000001')
 ON CONFLICT (email) DO NOTHING;
 
 -- ============================================
 -- DOCTORS (password: doctor123)
 -- ============================================
 INSERT INTO users (name, email, password, role, phone) VALUES
-('Dr. Aisha Patel', 'aisha.patel@smarthospital.com', '$2b$10$5Q8gJHv3q4x5PxK2e0q9duWJM5A2a3xGhFz5YJ3KJ7t1zF3YdEaHe', 'doctor', '+91-9000000002'),
-('Dr. Rajesh Kumar', 'rajesh.kumar@smarthospital.com', '$2b$10$5Q8gJHv3q4x5PxK2e0q9duWJM5A2a3xGhFz5YJ3KJ7t1zF3YdEaHe', 'doctor', '+91-9000000003'),
-('Dr. Priya Sharma', 'priya.sharma@smarthospital.com', '$2b$10$5Q8gJHv3q4x5PxK2e0q9duWJM5A2a3xGhFz5YJ3KJ7t1zF3YdEaHe', 'doctor', '+91-9000000004'),
-('Dr. Vikram Singh', 'vikram.singh@smarthospital.com', '$2b$10$5Q8gJHv3q4x5PxK2e0q9duWJM5A2a3xGhFz5YJ3KJ7t1zF3YdEaHe', 'doctor', '+91-9000000005'),
-('Dr. Neha Gupta', 'neha.gupta@smarthospital.com', '$2b$10$5Q8gJHv3q4x5PxK2e0q9duWJM5A2a3xGhFz5YJ3KJ7t1zF3YdEaHe', 'doctor', '+91-9000000006')
+('Dr. Aisha Patel', 'aisha.patel@smarthospital.com', '$2a$10$LAMgTMBzd6KubYeAkAjhLe.7OuqcR0R7sZdcEjEjBiuchAVaSJqXy', 'doctor', '+91-9000000002'),
+('Dr. Rajesh Kumar', 'rajesh.kumar@smarthospital.com', '$2a$10$LAMgTMBzd6KubYeAkAjhLe.7OuqcR0R7sZdcEjEjBiuchAVaSJqXy', 'doctor', '+91-9000000003'),
+('Dr. Priya Sharma', 'priya.sharma@smarthospital.com', '$2a$10$LAMgTMBzd6KubYeAkAjhLe.7OuqcR0R7sZdcEjEjBiuchAVaSJqXy', 'doctor', '+91-9000000004'),
+('Dr. Vikram Singh', 'vikram.singh@smarthospital.com', '$2a$10$LAMgTMBzd6KubYeAkAjhLe.7OuqcR0R7sZdcEjEjBiuchAVaSJqXy', 'doctor', '+91-9000000005'),
+('Dr. Neha Gupta', 'neha.gupta@smarthospital.com', '$2a$10$LAMgTMBzd6KubYeAkAjhLe.7OuqcR0R7sZdcEjEjBiuchAVaSJqXy', 'doctor', '+91-9000000006')
 ON CONFLICT (email) DO NOTHING;
 
 INSERT INTO doctors (user_id, specialization, department, experience, qualification, license_number, consultation_fee, bio, rating, total_reviews) VALUES
@@ -33,16 +33,16 @@ ON CONFLICT (user_id) DO NOTHING;
 -- PATIENTS (password: patient123)
 -- ============================================
 INSERT INTO users (name, email, password, role, phone) VALUES
-('Arjun Mehta', 'arjun.mehta@email.com', '$2b$10$5Q8gJHv3q4x5PxK2e0q9duWJM5A2a3xGhFz5YJ3KJ7t1zF3YdEaHe', 'patient', '+91-9100000001'),
-('Sneha Reddy', 'sneha.reddy@email.com', '$2b$10$5Q8gJHv3q4x5PxK2e0q9duWJM5A2a3xGhFz5YJ3KJ7t1zF3YdEaHe', 'patient', '+91-9100000002'),
-('Karan Joshi', 'karan.joshi@email.com', '$2b$10$5Q8gJHv3q4x5PxK2e0q9duWJM5A2a3xGhFz5YJ3KJ7t1zF3YdEaHe', 'patient', '+91-9100000003'),
-('Meera Nair', 'meera.nair@email.com', '$2b$10$5Q8gJHv3q4x5PxK2e0q9duWJM5A2a3xGhFz5YJ3KJ7t1zF3YdEaHe', 'patient', '+91-9100000004'),
-('Ravi Desai', 'ravi.desai@email.com', '$2b$10$5Q8gJHv3q4x5PxK2e0q9duWJM5A2a3xGhFz5YJ3KJ7t1zF3YdEaHe', 'patient', '+91-9100000005'),
-('Ananya Iyer', 'ananya.iyer@email.com', '$2b$10$5Q8gJHv3q4x5PxK2e0q9duWJM5A2a3xGhFz5YJ3KJ7t1zF3YdEaHe', 'patient', '+91-9100000006'),
-('Deepak Verma', 'deepak.verma@email.com', '$2b$10$5Q8gJHv3q4x5PxK2e0q9duWJM5A2a3xGhFz5YJ3KJ7t1zF3YdEaHe', 'patient', '+91-9100000007'),
-('Pooja Malhotra', 'pooja.malhotra@email.com', '$2b$10$5Q8gJHv3q4x5PxK2e0q9duWJM5A2a3xGhFz5YJ3KJ7t1zF3YdEaHe', 'patient', '+91-9100000008'),
-('Amit Saxena', 'amit.saxena@email.com', '$2b$10$5Q8gJHv3q4x5PxK2e0q9duWJM5A2a3xGhFz5YJ3KJ7t1zF3YdEaHe', 'patient', '+91-9100000009'),
-('Divya Kapoor', 'divya.kapoor@email.com', '$2b$10$5Q8gJHv3q4x5PxK2e0q9duWJM5A2a3xGhFz5YJ3KJ7t1zF3YdEaHe', 'patient', '+91-9100000010')
+('Arjun Mehta', 'arjun.mehta@email.com', '$2a$10$9DaHC2MqgQ9crrVk4Xt7nuf79byqG.vWXU39uiXyLm9kxdQNZjT/m', 'patient', '+91-9100000001'),
+('Sneha Reddy', 'sneha.reddy@email.com', '$2a$10$9DaHC2MqgQ9crrVk4Xt7nuf79byqG.vWXU39uiXyLm9kxdQNZjT/m', 'patient', '+91-9100000002'),
+('Karan Joshi', 'karan.joshi@email.com', '$2a$10$9DaHC2MqgQ9crrVk4Xt7nuf79byqG.vWXU39uiXyLm9kxdQNZjT/m', 'patient', '+91-9100000003'),
+('Meera Nair', 'meera.nair@email.com', '$2a$10$9DaHC2MqgQ9crrVk4Xt7nuf79byqG.vWXU39uiXyLm9kxdQNZjT/m', 'patient', '+91-9100000004'),
+('Ravi Desai', 'ravi.desai@email.com', '$2a$10$9DaHC2MqgQ9crrVk4Xt7nuf79byqG.vWXU39uiXyLm9kxdQNZjT/m', 'patient', '+91-9100000005'),
+('Ananya Iyer', 'ananya.iyer@email.com', '$2a$10$9DaHC2MqgQ9crrVk4Xt7nuf79byqG.vWXU39uiXyLm9kxdQNZjT/m', 'patient', '+91-9100000006'),
+('Deepak Verma', 'deepak.verma@email.com', '$2a$10$9DaHC2MqgQ9crrVk4Xt7nuf79byqG.vWXU39uiXyLm9kxdQNZjT/m', 'patient', '+91-9100000007'),
+('Pooja Malhotra', 'pooja.malhotra@email.com', '$2a$10$9DaHC2MqgQ9crrVk4Xt7nuf79byqG.vWXU39uiXyLm9kxdQNZjT/m', 'patient', '+91-9100000008'),
+('Amit Saxena', 'amit.saxena@email.com', '$2a$10$9DaHC2MqgQ9crrVk4Xt7nuf79byqG.vWXU39uiXyLm9kxdQNZjT/m', 'patient', '+91-9100000009'),
+('Divya Kapoor', 'divya.kapoor@email.com', '$2a$10$9DaHC2MqgQ9crrVk4Xt7nuf79byqG.vWXU39uiXyLm9kxdQNZjT/m', 'patient', '+91-9100000010')
 ON CONFLICT (email) DO NOTHING;
 
 INSERT INTO patients (user_id, blood_group, age, gender, date_of_birth, address, emergency_contact_name, emergency_contact_phone, allergies, chronic_conditions) VALUES

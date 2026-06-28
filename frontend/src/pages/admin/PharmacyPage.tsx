@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { pharmacyApi } from '../../lib/api';
-import { Pill, Search, AlertTriangle, Package } from 'lucide-react';
+import { Search, AlertTriangle } from 'lucide-react';
 
 export default function PharmacyPage() {
   const [medicines, setMedicines] = useState<any[]>([]);

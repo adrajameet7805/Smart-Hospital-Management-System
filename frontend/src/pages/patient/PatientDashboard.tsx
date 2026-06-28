@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useAuth } from '../../context/AuthContext';
-import { appointmentApi, patientApi, billingApi } from '../../lib/api';
-import { Calendar, FileText, CreditCard, Clock, Heart, Activity, ArrowUpRight, Plus } from 'lucide-react';
+import { appointmentApi, billingApi } from '../../lib/api';
+import { Calendar, FileText, CreditCard, Activity, ArrowUpRight, Plus } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 export default function PatientDashboard() {

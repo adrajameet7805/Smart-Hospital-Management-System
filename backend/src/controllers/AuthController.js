@@ -21,10 +21,9 @@ class AuthController {
     if (!errors.isEmpty()) return res.status(400).json({ success: false, errors: errors.array() });
 
     try {
-      const { user, profile, accessToken, refreshToken } = await AuthService.login(req.body.email, req.body.password);
+      const { user, profile, token } = await AuthService.login(req.body.email, req.body.password);
       
-      res.cookie('token', accessToken, { httpOnly: true, secure: process.env.NODE_ENV === 'production', sameSite: 'strict', maxAge: 15 * 60 * 1000, path: '/' });
-      res.cookie('refreshToken', refreshToken, { httpOnly: true, secure: process.env.NODE_ENV === 'production', sameSite: 'strict', maxAge: 7 * 24 * 60 * 60 * 1000, path: '/api/v1/auth/refresh' });
+      res.cookie('token', token, { httpOnly: true, secure: process.env.NODE_ENV === 'production', sameSite: 'strict', maxAge: 15 * 60 * 1000, path: '/' });
       
       res.json({ success: true, message: 'Login successful.', data: { user, profile } });
     } catch (err) {
@@ -45,6 +44,7 @@ class AuthController {
 
   logout(req, res) {
     res.clearCookie('token');
+    res.clearCookie('refreshToken', { path: '/api/v1/auth/refresh' });
     res.json({ success: true, message: 'Logged out.' });
   }
 

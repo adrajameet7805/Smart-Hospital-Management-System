@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { appointmentApi } from '../../lib/api';
-import { Calendar, Clock, X } from 'lucide-react';
+import { X } from 'lucide-react';
 
 export default function AppointmentsPage() {
   const [appointments, setAppointments] = useState<any[]>([]);

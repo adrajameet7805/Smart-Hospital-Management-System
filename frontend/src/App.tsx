@@ -61,17 +61,6 @@ function ProtectedRoute({ children, roles }: { children: React.ReactNode; roles?
   return <>{children}</>;
 }
 
-function PlaceholderPage({ title }: { title: string }) {
-  return (
-    <div className="flex items-center justify-center min-h-[60vh]">
-      <div className="text-center glass-card p-12 animate-scale-in">
-        <h2 className="text-xl font-bold text-white mb-2">{title}</h2>
-        <p className="text-surface-200 text-sm">This page is coming soon</p>
-      </div>
-    </div>
-  );
-}
-
 // Temporary real component until full page is built
 const PatientRecordsPage = () => (
   <div className="p-8 text-white">

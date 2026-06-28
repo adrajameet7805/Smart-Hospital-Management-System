@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { patientApi } from '../../lib/api';
-import { Users, Search, Eye, Trash2, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Search, Eye, Trash2, ChevronLeft, ChevronRight } from 'lucide-react';
 
 export default function PatientManagement() {
   const [patients, setPatients] = useState<any[]>([]);
