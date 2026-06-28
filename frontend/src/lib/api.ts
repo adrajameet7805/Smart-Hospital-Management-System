@@ -106,7 +106,13 @@ const aiAxios = axios.create({
   headers: { 'Content-Type': 'application/json' },
 });
 
-// AI Auth interceptor removed since we use HTTP-Only cookies and AI services don't require JWT via Bearer token
+aiAxios.interceptors.request.use((config) => {
+  const token = localStorage.getItem('token') ||
+                localStorage.getItem('authToken') ||
+                localStorage.getItem('jwt');
+  if (token) config.headers.Authorization = 'Bearer ' + token;
+  return config;
+});
 
 export const aiApi = {
   triage: (data: { symptoms: string[]; age?: number; gender?: string }) =>

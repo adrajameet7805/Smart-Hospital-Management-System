@@ -1,3 +1,12 @@
+// ── Fail-fast environment validation ─────────────────
+const REQUIRED_ENV = ['JWT_SECRET','DB_HOST','DB_PASSWORD','REDIS_URL'];
+const _missing = REQUIRED_ENV.filter(k => !process.env[k]);
+if (_missing.length > 0) {
+  console.error('FATAL: Missing required env variables:', _missing.join(', '));
+  console.error('Copy .env.example to .env and fill all values.');
+  process.exit(1);
+}
+
 require('dotenv').config();
 
 const express = require('express');
@@ -13,19 +22,6 @@ const errorHandler = require('./middleware/errorHandler');
 const { apiLimiter } = require('./middleware/rateLimiter');
 const { metricsMiddleware, metricsEndpoint } = require('./middleware/metrics');
 
-const REQUIRED_ENV = ['JWT_SECRET', 'DB_HOST', 'DB_PASSWORD', 'REDIS_URL'];
-
-function validateEnv() {
-  const missing = REQUIRED_ENV.filter((key) => !process.env[key]);
-  if (missing.length === 0) {
-    return;
-  }
-
-  throw new Error(
-    `Missing env vars: ${missing.join(', ')}. Copy .env.example to .env and fill all values.`
-  );
-}
-
 const app = express();
 app.set('trust proxy', 1);
 const server = http.createServer(app);
@@ -33,7 +29,7 @@ const server = http.createServer(app);
 const ALLOWED_ORIGINS = (process.env.ALLOWED_ORIGINS ||
   'http://localhost,http://localhost:5173')
   .split(',')
-  .map((origin) => origin.trim())
+  .map(o => o.trim())
   .filter(Boolean);
 
 const io = new Server(server, {
@@ -42,9 +38,9 @@ const io = new Server(server, {
       if (!origin || ALLOWED_ORIGINS.includes(origin)) {
         return callback(null, true);
       }
-      return callback(new Error(`WS CORS blocked: ${origin}`));
+      return callback(new Error('WebSocket CORS blocked: ' + origin));
     },
-    methods: ['GET', 'POST'],
+    methods: ['GET','POST'],
     credentials: true,
   },
   transports: ['websocket', 'polling'],
@@ -55,14 +51,14 @@ const io = new Server(server, {
 app.use(helmet({ crossOriginResourcePolicy: false }));
 app.use(cors({
   origin: (origin, callback) => {
-    if (!origin || ALLOWED_ORIGINS.includes(origin)) {
-      return callback(null, true);
-    }
-    return callback(new Error(`CORS blocked: ${origin}`));
+    if (!origin) return callback(null, true);
+    if (ALLOWED_ORIGINS.includes(origin)) return callback(null, true);
+    return callback(new Error('CORS blocked for origin: ' + origin));
   },
   credentials: true,
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
+  methods: ['GET','POST','PUT','DELETE','PATCH','OPTIONS'],
+  allowedHeaders: ['Content-Type','Authorization','X-Requested-With'],
+  exposedHeaders: ['X-Total-Count'],
 }));
 app.use(cookieParser());
 app.use(express.json({ limit: '10mb' }));

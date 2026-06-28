@@ -9,7 +9,7 @@ const authLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
   max: process.env.NODE_ENV === 'production' ? 10 : 1000,
   message: {
-    error: 'Too many login attempts. Try again in 15 minutes.',
+    error: 'Too many login attempts. Please try again in 15 minutes.',
     code: 'RATE_LIMIT_EXCEEDED',
   },
   standardHeaders: true,
@@ -17,7 +17,8 @@ const authLimiter = rateLimit({
   skip: (req) => process.env.NODE_ENV !== 'production',
   keyGenerator: (req) =>
     req.headers['x-forwarded-for']?.split(',')[0]?.trim() ||
-    req.ip || 'unknown',
+    req.ip ||
+    'unknown',
 });
 
 const router = express.Router();
