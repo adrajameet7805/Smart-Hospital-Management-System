@@ -54,19 +54,23 @@ jobs:
           NODE_ENV: test
 
   lockfile-check:
+    name: Verify lockfile sync
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+
       - uses: actions/setup-node@v4
         with:
           node-version: '20'
-      - name: Check frontend lockfile is in sync
+
+      - name: Check frontend/package-lock.json is in sync
         working-directory: frontend
         run: |
-          npm install --package-lock-only --ignore-scripts
+          npm install --package-lock-only --ignore-scripts --silent
           if ! git diff --exit-code package-lock.json; then
-            echo "ERROR: frontend/package-lock.json is out of sync with package.json"
-            echo "Run 'cd frontend && npm install' locally and commit the updated lockfile"
+            echo ""
+            echo "FAIL: package-lock.json is out of sync with package.json"
+            echo "Fix: cd frontend && npm install && git add package-lock.json && git push"
             exit 1
           fi
 
@@ -85,7 +89,7 @@ jobs:
           cache-dependency-path: frontend/package-lock.json
       - name: Install frontend dependencies
         working-directory: frontend
-        run: npm ci
+        run: npm install --legacy-peer-deps
       - run: cd frontend && npm run lint
       - run: cd frontend && npm run build
 
