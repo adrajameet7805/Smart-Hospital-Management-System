@@ -6,12 +6,7 @@ const api = axios.create({
   withCredentials: true, // Send HTTP-Only cookies automatically
 });
 
-// Add JWT token to every request automatically
-api.interceptors.request.use((config) => {
-  const token = localStorage.getItem('token');
-  if (token) config.headers.Authorization = `Bearer ${token}`;
-  return config;
-});
+// Auth interceptor removed since we use HTTP-Only cookies
 
 // Handle 401 responses — redirect to login
 api.interceptors.response.use(
@@ -111,13 +106,7 @@ const aiAxios = axios.create({
   headers: { 'Content-Type': 'application/json' },
 });
 
-aiAxios.interceptors.request.use((config) => {
-  const token = localStorage.getItem('token') ||
-                localStorage.getItem('authToken') ||
-                localStorage.getItem('jwt');
-  if (token) config.headers.Authorization = 'Bearer ' + token;
-  return config;
-});
+// AI Auth interceptor removed since we use HTTP-Only cookies and AI services don't require JWT via Bearer token
 
 export const aiApi = {
   triage: (data: { symptoms: string[]; age?: number; gender?: string }) =>
