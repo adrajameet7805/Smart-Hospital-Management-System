@@ -74,7 +74,17 @@ app.get('/api/health', (req, res) => {
 app.get('/metrics', metricsEndpoint);
 
 function registerRoutes() {
-  app.use('/api/v1/', apiLimiter);
+  app.use('/api/v1/patients',     apiLimiter);
+  app.use('/api/v1/doctors',      apiLimiter);
+  app.use('/api/v1/appointments', apiLimiter);
+  app.use('/api/v1/billing',      apiLimiter);
+  app.use('/api/v1/pharmacy',     apiLimiter);
+  app.use('/api/v1/ambulance',    apiLimiter);
+  app.use('/api/v1/analytics',    apiLimiter);
+  app.use('/api/v1/qr',           apiLimiter);
+  app.use('/api/v1/ai',           apiLimiter);
+  // NOTE: /api/v1/auth is intentionally excluded.
+  // auth.js applies its own dev-safe authLimiter on login only.
 
   app.use('/api/v1/auth', require('./routes/v1/auth'));
   app.use('/api/v1/patients', require('./routes/v1/patients'));
@@ -120,7 +130,7 @@ io.on('connection', (socket) => {
 });
 
 async function startServer() {
-  validateEnv();
+
   await initializeDatabase();
 
   const PORT = process.env.PORT || 5000;
