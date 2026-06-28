@@ -1,21 +1,14 @@
-require('dotenv').config();
-
-// ── Fail-fast .env validation ──────────────────────
-const REQUIRED_ENV = [
-  'JWT_SECRET',
-  'DB_HOST',
-  'DB_PASSWORD',
-  'REDIS_URL',
-];
-const _missingEnv = REQUIRED_ENV.filter(k => !process.env[k]);
-if (_missingEnv.length > 0) {
-  console.error('╔══════════════════════════════════════════╗');
-  console.error('║  FATAL: Missing environment variables    ║');
-  console.error('╚══════════════════════════════════════════╝');
-  console.error('  Missing:', _missingEnv.join(', '));
-  console.error('  Action:  Copy .env.example → .env and fill all values');
+const REQUIRED_ENV = ['JWT_SECRET','DB_HOST','DB_PASSWORD','REDIS_URL'];
+const _missing = REQUIRED_ENV.filter(k => !process.env[k]);
+if (_missing.length > 0) {
+  console.error('FATAL: Missing env vars:', _missing.join(', '));
+  console.error('Copy .env.example to .env and fill all values.');
   process.exit(1);
 }
+
+require('dotenv').config();
+
+
 
 const express = require('express');
 const cors = require('cors');
@@ -48,9 +41,9 @@ const io = new Server(server, {
       if (!origin || ALLOWED_ORIGINS.includes(origin)) {
         return callback(null, true);
       }
-      return callback(new Error(`WebSocket CORS blocked: ${origin}`));
+      return callback(new Error('WS CORS blocked: ' + origin));
     },
-    methods: ['GET', 'POST'],
+    methods: ['GET','POST'],
     credentials: true,
   },
   transports: ['websocket', 'polling'],
@@ -62,15 +55,13 @@ const io = new Server(server, {
 app.use(helmet({ crossOriginResourcePolicy: false }));
 app.use(cors({
   origin: (origin, callback) => {
-    // Allow no-origin requests (Postman, curl, mobile)
     if (!origin) return callback(null, true);
     if (ALLOWED_ORIGINS.includes(origin)) return callback(null, true);
-    return callback(new Error(`CORS blocked for origin: ${origin}`));
+    return callback(new Error('CORS blocked: ' + origin));
   },
   credentials: true,
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
-  exposedHeaders: ['X-Total-Count'],
+  methods: ['GET','POST','PUT','DELETE','PATCH','OPTIONS'],
+  allowedHeaders: ['Content-Type','Authorization','X-Requested-With'],
 }));
 app.use(cookieParser());
 app.use(express.json({ limit: '10mb' }));
